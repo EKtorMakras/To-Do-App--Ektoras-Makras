@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <!-- Font-awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous" />
+
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" /> -->
+
+    <!-- CSS  -->
+    <link rel="stylesheet" href="css/normalize.css">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="Js/main.js" defer></script>
+
+
+    <title>To-do-App</title>
+
+</head>
+
+
+<body>
+
+
+    <div class="container">
+
+        <div class="inner-container">
+
+            <!--& ---------- Form ---------- -->
+            <form class="form" id="form">
+
+                <div class="form__group">
+                    <label for="task-title" class="form__label">Task Title</label>
+                    <input type="text" class="form__input form__input--title" id="task-title"
+                        placeholder="e.g. Walk the dog">
+                </div>
+
+                <div class="form__group">
+                    <label for="task-category" class="form__label">Category</label>
+                    <select class="form__input form__input--select" id="task-category" name="task-category">
+                        <option value="" disabled selected hidden>Choose a Category...</option>
+                        <option value="Personal" class="form__option">Personal</option>
+                        <option value="Work" class="form__option">Work</option>
+                        <option value="Leisure" class="form__option">Leisure</option>
+                        <option value="Misc" class="form__option">Misc</option>
+                    </select>
+                </div>
+
+                <div class="form__group">
+                    <label for="task-date" class="form__label">Date to be completed</label>
+                    <input type="date" class="form__input form__input--date" id="task-date">
+                </div>
+
+                <div class="form__group">
+                    <label for="task-description class=" class="form__label">Task Description</label>
+                    <textarea type="text" class="form__input form__input--description" id="task-description" rows="8"
+                        cols="6" maxlength="300"></textarea>
+                </div>
+
+                <div class="form__btn-wrapper">
+                    <button type="submit" class="form__btn">Add Task</button>
+                </div>
+            </form>
+
+            <!--& ---------- End Of Form ---------- -->
+
+
+            <!--& ---------- Important List ---------- -->
+            <div class="list-wrapper">
+                <h2 class="list__title list__title--important">My Important Tasks</h2>
+                <ul class="list list--important">
+                    <li class="list__item">
+                        <p class="list__item-text list__item-title">Walk the Dog</p>
+                        <p class="list__item-text list__item-category">Leisure</p>
+                        <p class="list__item-text list__item-date">20/2/2023</p>
+                        <p class="list__item-text list__item-desc hidden">Road Trip to Italy</p>
+
+                        <div class="list__item-actions">
+                            <a href="#form" class="list__item-icon list__item-icon--edit" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <span class="list__item-icon list__item-icon--duplicate" title="Duplicate">
+                                <i class="fas fa-clone"></i>
+                            </span>
+                            <span class="list__item-icon list__item-icon--delete" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </span>
+                        </div>
+
+                        <div class="list__item-see-more">
+                            <span>See more</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!--& ---------- End Of Important List ---------- -->
+
+
+            <!--& ---------- Main List ---------- -->
+            <div class="list-wrapper">
+                <h2 class="list__title">My Main Tasks</h2>
+                <div class="list__btn--sort-wrapper invisible">
+                    <span class="list__btn--sort-text">Sort by</span><button class="list__btn--sort">Asc</button>
+                </div>
+                <ul class="list list--main">
+                    <li class="list__item">
+                        <p class="list__item-text list__item-title">Walk the Dog</p>
+                        <p class="list__item-text list__item-category">Leisure</p>
+                        <p class="list__item-text list__item-date">20/2/2023</p>
+                        <p class="list__item-text list__item-desc hidden">Road Trip to Italy</p>
+
+                        <div class="list__item-actions">
+                            <a href="#form" class="list__item-icon list__item-icon--edit" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <span class="list__item-icon list__item-icon--duplicate" title="Duplicate">
+                                <i class="fas fa-clone"></i>
+                            </span>
+                            <span class="list__item-icon list__item-icon--important" title="Mark as Important">
+                                <i class="far fa-star"></i>
+                            </span>
+                            <span class="list__item-icon list__item-icon--delete" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </span>
+                        </div>
+
+                        <div class="list__item-see-more">
+                            <span>See more</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!--& ---------- End Of Main List ---------- -->
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>
+
+
+
+<!-- ----------------------------------- Comments ----------------------------------- -->
+
+<!--* ------------------------------ Header ------------------------------ *-->
+<!--* ------------------------------ End Of Header ------------------------------ *-->
+
+<!--$ --------------- Showcase/Hero Section --------------- $-->
+<!--$ --------------- End Of Showcase/Hero Section --------------- $-->
+
+<!--& ---------- Hero ---------- -->
+<!--& ---------- End Of Hero ---------- -->
+
+<!--% ------- Hero ------- -->
+<!--% ------- End Of Hero ------- -->
+
+<!--# ---- Hero ---- -->
+<!--# ---- End Of Hero ---- -->
+
+<!--^ -- Hero -- -->
+<!--^ -- End Of Hero -- -->

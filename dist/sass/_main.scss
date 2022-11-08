@@ -1,0 +1,320 @@
+@use "abstracts"as *;
+
+
+//% ***************  Generic *************** //
+
+html {
+    scroll-padding-top: 8rem;
+    scroll-behavior: smooth;
+}
+
+.inner-container {
+    background-color: var(--clr-grey-light-5);
+    outline: 1px solid #fff;
+    padding: 4rem 2rem;
+    width: 50rem;
+}
+
+
+
+//% ***************  End Of Generic  *************** //
+
+
+
+//% ***************   Form  *************** //
+
+.form {
+
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-bottom: 4rem;
+    padding: 1rem 3rem;
+
+
+    &__label {
+        font-size: 1.2rem;
+        color: var(--clr-grey-dark-7);
+    }
+
+    &__group {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    &__input {
+        // margin-left: auto;
+        width: 100%;
+        font-size: 1rem;
+        background-color: transparent;
+        border: none;
+        border-bottom: 1px solid #fff;
+        color: var(--clr-grey-dark-5);
+        padding: .4rem 1rem;
+
+        &:focus {
+            outline: 1px solid cyan;
+        }
+
+        &::placeholder {
+            font-size: 1rem;
+            color: rgba(color(primary-dark-3), .6);
+        }
+
+
+        &--description {
+            resize: none;
+            padding: 1rem;
+            background-color: #fff;
+            border-radius: 8px;
+        }
+    }
+
+
+    &__btn {
+        padding: 1rem 2rem;
+        font-size: 1.4rem;
+        color: var(--clr-grey-light-9);
+        background-color: var(--clr-primary);
+        border-radius: 8px;
+        transition: $transition;
+
+        &:hover {
+            background-color: var(--clr-primary-dark-1);
+        }
+
+        &-wrapper {
+            @include flex;
+        }
+    }
+}
+
+//% ***************   End Of Form  *************** //
+
+
+
+
+//% ***************   List  *************** //
+
+.list {
+    overflow: auto;
+    margin-bottom: 6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+
+
+
+    &__title {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+
+        &--important {
+            margin-bottom: 1.5rem;
+        }
+    }
+
+
+    &__btn--sort {
+
+        font-size: 1.2rem;
+        padding: .5rem 1rem;
+        width: 5rem;
+        background-color: var(--clr-primary);
+        border-radius: 5px;
+        color: #fff;
+
+        &:hover {
+            background-color: var(--clr-primary-dark-1);
+        }
+
+        &-wrapper {
+            text-align: right;
+            width: 70%;
+            @include center-mar;
+            margin-bottom: 1rem;
+        }
+
+        &-text {
+            font-size: 1.1rem;
+            margin-right: 8px;
+        }
+    }
+
+
+    &__item {
+        display: grid;
+        grid-template-columns: 1.5fr repeat(3, 1fr);
+        grid-template-rows: 5rem 5rem 1fr;
+        column-gap: 1.2rem;
+        position: relative;
+        background-color: #fff;
+        padding: 1rem 1.2rem;
+        padding-top: 0;
+        width: 70%;
+        background-color: var(--clr-grey-light-7);
+        border-radius: 10px;
+        // height: 20rem;
+
+
+        &.passed-date {
+            isolation: isolate;
+
+            &>* {
+                opacity: .7;
+            }
+
+            &::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(color(grey-light-5), .7);
+                z-index: -1;
+            }
+        }
+
+
+        &-title {
+            grid-row: 1/3;
+            justify-self: start;
+            align-self: center;
+            // margin-right: 4rem;
+            font-size: 1.3rem;
+        }
+
+        &-category {
+            grid-row: 1/2;
+            align-self: center;
+            font-size: 1.2rem;
+            line-height: 1.5;
+            margin-bottom: -10px;
+        }
+
+        &-date {
+            grid-row: 2/3;
+            align-self: center;
+            font-size: 1rem;
+            color: var(--clr-grey-light-3);
+        }
+
+        &-desc {
+            grid-row: 3/4;
+            grid-column: 1/-1;
+            padding: 1rem .5rem;
+            background-color: rgb(207, 243, 255);
+            margin-top: 1rem;
+            font-size: 1.3rem;
+        }
+
+
+        &-actions {
+            grid-column: 3/5;
+            justify-self: center;
+            align-self: end;
+
+            display: flex;
+            gap: 1rem;
+        }
+
+
+        &-icon {
+            font-size: 1.2rem;
+            color: var(--clr-primary-dark-3);
+            cursor: pointer;
+            transition: $transition;
+
+            &:hover {
+                color: var(--clr-primary-dark-1);
+            }
+        }
+
+        &-see-more {
+            grid-column: 3/5;
+            justify-self: end;
+            align-self: end;
+            font-size: 1.2rem;
+            color: var(--clr-primary-dark-3);
+            cursor: pointer;
+            transition: $transition;
+
+            span {
+
+                @include flex;
+                gap: 8px;
+
+                &::after {
+                    font-family: "Font Awesome 5 Free";
+                    font-weight: 900;
+                    content: '\f078';
+                    color: inherit;
+                }
+            }
+
+            &.active span::after {
+                content: '\f077';
+            }
+
+            &:hover {
+                color: var(--clr-primary-dark-1);
+            }
+        }
+    }
+
+
+
+    //$ =========== Important List  =========== //
+
+    &--important {
+
+
+        & .list__item {
+            background-color: var(--clr-red-light-2);
+        }
+    }
+}
+
+//% ***************  End Of  List  *************** //
+
+
+
+
+
+
+
+
+
+
+// -------------------------------------------- Comments --------------------------------------------------- //
+
+
+//* ***************************************   Comment  *************************************** //
+//* ***************************************  End Of Comment  *************************************** //
+
+
+//& ********************************  Comment  ******************************** //
+//& ********************************  End Of Comment  ******************************** //
+
+
+//$ *******************  Comment  ******************* $//
+//$ *******************  End Of Comment  ******************* $//
+
+
+//% ***************  Comment  *************** //
+//% ***************  End Of Comment  *************** //
+
+
+//@ ************  Comment  ************ //
+//@ ************  End Of Comment  ************ //
+
+
+//# ********  Comment  ******** //
+//# ********  End Of Comment  ******** //
+
+
+//^ *****  Comment  ***** //
+//^ *****  End Of Comment  ***** //
