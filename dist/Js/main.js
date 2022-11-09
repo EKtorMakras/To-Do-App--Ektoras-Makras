@@ -16,13 +16,18 @@ const lists = document.querySelectorAll('.list');
 const sortBtnWrapper = document.querySelector('.list__btn--sort-wrapper');
 const sortBtn = document.querySelector('.list__btn--sort');
 
+const clearMainBtnWrapper = document.querySelector('#clear-main-btn-wrapper');
+const clearMainBtn = document.querySelector('#clear-main-btn');
+const clearImportantBtnWrapper = document.querySelector('#clear-important-btn-wrapper');
+const clearImportantBtn = document.querySelector('#clear-important-btn');
+
 
 // ========= Other ========= //
 const currentDate = new Date();
 let tasksArr = [];
 let mainTasksArr = [];
 let importantTasksArr = [];
-let order = 'asc';
+let order = getLocalStorage('order') ? getLocalStorage('order') : 'asc';
 let editFlag = false;
 let editId;
 
@@ -31,50 +36,74 @@ let editId;
 
 //* ============================= Event Listeners ============================= //
 
+// Get Items from Local Storage(if any)
+window.addEventListener('DOMContentLoaded', () => {
+    loadItemsFromLs();
+    updateLists();
+    updateElementsContent();
+    checkListsStatus();
+    displayListItems(order);
+})
+
+// Add Task Action
 addTaskBtn.addEventListener('click', (evt) => {
     evt.preventDefault();
 
     if (!editFlag) {
         addTaskObj();
         updateLists();
-        createListItems(order);
+        checkListsStatus();
+        displayListItems(order);
     } else {
-        saveEditedTask(editId)
+        saveEditedTask(editId);
+        displayListItems(order);
     }
 
     setBackToDefault();
 })
 
 
+// Sort Action
 sortBtn.addEventListener('click', () => {
     changeListOrder();
 })
 
 
-// List Item Actions
+// Task Manipulation Actions
 lists.forEach(list => {
     list.addEventListener('click', evt => {
         const target = evt.target;
-        const parentLiEl = target.closest('.list__item');
-        const liElId = parentLiEl.dataset.id;
+        if (target.closest('.list__item')) { //Check if an clicked in a li element
+            const parentLiEl = target.closest('.list__item');
+            const liElId = parentLiEl.dataset.id;
 
-        if (target.classList.contains('fa-edit')) {
-            editTask(liElId);
-        } else if (target.classList.contains('fa-clone')) {
-            duplicateTask(liElId);
-        } else if (target.classList.contains('fa-trash')) {
-            deleteTask(liElId);
-        } else if (target.classList.contains('fa-star')) {
-            markImportantTask(liElId);
+            if (target.classList.contains('fa-edit')) {
+                editTask(liElId);
+            } else if (target.classList.contains('fa-clone')) {
+                duplicateTask(liElId);
+            } else if (target.classList.contains('fa-trash')) {
+                deleteTask(liElId);
+            } else if (target.classList.contains('fa-star')) {
+                markImportantTask(liElId);
+            }
         }
     })
 })
 
 
+// Clear List Action
+clearMainBtn.addEventListener('click', () => {
+    clearList('main')
+})
+
+clearImportantBtn.addEventListener('click', () => {
+    clearList('important')
+})
+
 //* ============================= Functions ============================= //
 
 
-// ========= Main ========= //
+// ========= Main Functions ========= //
 
 function addTaskObj() {
 
@@ -101,141 +130,111 @@ function addTaskObj() {
 }
 
 
-function createListItems(order) {
+function displayListItems(order) {
     sortArrByDate(mainTasksArr, order);
+    updateLocalStorage();
     mainListEl.innerHTML = '';
     importantListEl.innerHTML = '';
-    sortBtnWrapper.classList.remove('invisible')
 
     // Main List
     mainTasksArr.forEach(task => {
-        const listItemTitle = task.title;
-        const listItemCategory = task.category;
-        const listItemDesc = task.desc;
-        const listItemDate = task.date.toLocaleString('en-US', {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric'
-        })
-        const listItemId = task.id;
-        let isPassedDate = currentDate > task.date;
-
-
-
-        // ----- New Li Element ----- //
-        const newLiEl = document.createElement('li');
-        newLiEl.classList.add('list__item');
-        newLiEl.setAttribute('data-id', listItemId);
-
-        newLiEl.innerHTML = `
-                        <p class="list__item-text list__item-title">${listItemTitle}</p>
-                        <p class="list__item-text list__item-category">${listItemCategory}</p>
-                        <p class="list__item-text list__item-date">${listItemDate}</p>
-                        <p class="list__item-text list__item-desc hidden">${listItemDesc}</p>
-
-                        <div class="list__item-actions">
-                            <a href="#form" class="list__item-icon list__item-icon--edit" title="Edit">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <span class="list__item-icon list__item-icon--duplicate" title="Duplicate">
-                                <i class="fas fa-clone"></i>
-                            </span>
-                            <span class="list__item-icon list__item-icon--important" title="Mark as Important">
-                                <i class="far fa-star"></i>
-                            </span>
-                            <span class="list__item-icon list__item-icon--delete" title="Delete">
-                                <i class="fas fa-trash"></i>
-                            </span>
-                        </div>
-
-                        <div class="list__item-see-more">
-                            <span>See more</span>
-                        </div>
-            `
-
-        // See more functionality
-        const seeMore = newLiEl.querySelector('.list__item-see-more');
-        const newLiDesc = newLiEl.querySelector('.list__item-desc');
-
-        seeMore.addEventListener('click', function () {
-            newLiDesc.classList.toggle('hidden');
-            this.classList.toggle('active');
-        })
-
-        // Disable Actions if passed date
-        const newLiActions = newLiEl.querySelector('.list__item-actions')
-        if (isPassedDate) {
-            newLiActions.classList.add('invisible');
-            newLiEl.classList.add('passed-date');
-        }
-
-        // Append Child to Main List
-        mainListEl.appendChild(newLiEl);
+        createListItem('main', task);
     })
 
 
     // Important List
     importantTasksArr.forEach(task => {
-        const listItemTitle = task.title;
-        const listItemCategory = task.category;
-        const listItemDesc = task.desc;
-        const listItemDate = task.date.toLocaleString('en-US', {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric'
-        })
-        const listItemId = task.id;
-        let isPassedDate = currentDate > task.date;
-
-
-
-        // ----- New Li Element ----- //
-        const newLiEl = document.createElement('li');
-        newLiEl.classList.add('list__item');
-        newLiEl.setAttribute('data-id', listItemId);
-
-        newLiEl.innerHTML = `
-                        <p class="list__item-text list__item-title">${listItemTitle}</p>
-                        <p class="list__item-text list__item-category">${listItemCategory}</p>
-                        <p class="list__item-text list__item-date">${listItemDate}</p>
-                        <p class="list__item-text list__item-desc hidden">${listItemDesc}</p>
-
-                        <div class="list__item-actions">
-                            <a href="#form" class="list__item-icon list__item-icon--edit" title="Edit">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <span class="list__item-icon list__item-icon--duplicate" title="Duplicate">
-                                <i class="fas fa-clone"></i>
-                            </span>
-                            <span class="list__item-icon list__item-icon--delete" title="Delete">
-                                <i class="fas fa-trash"></i>
-                            </span>
-                        </div>
-
-                        <div class="list__item-see-more">
-                            <span>See more</span>
-                        </div>
-            `
-
-        // See more functionality
-        const seeMore = newLiEl.querySelector('.list__item-see-more');
-        const newLiDesc = newLiEl.querySelector('.list__item-desc');
-
-        seeMore.addEventListener('click', function () {
-            newLiDesc.classList.toggle('hidden');
-            this.classList.toggle('active');
-        })
-
-        // Disable Actions if passed date
-        const newLiActions = newLiEl.querySelector('.list__item-actions')
-        if (isPassedDate) {
-            newLiActions.classList.add('invisible');
-            newLiEl.classList.add('passed-date');
-        }
-
-        // Append Child to Main List
-        importantListEl.appendChild(newLiEl);
+        createListItem('important', task);
     })
+}
+
+
+function createListItem(listName, task) {
+
+    const currentList = document.querySelector(`.list--${listName}`);
+
+    // Get Object Values
+    const listItemTitle = task.title;
+    const listItemCategory = task.category;
+    const listItemDesc = task.desc;
+    const listItemDate = task.date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric'
+    })
+    const listItemId = task.id;
+
+    let isPassedDate = currentDate > task.date;
+
+
+
+    // ------- New Li Element ------- //
+
+    const newLiEl = document.createElement('li');
+    newLiEl.classList.add('list__item');
+    newLiEl.setAttribute('data-id', listItemId);
+
+    newLiEl.innerHTML = `
+                    <p class="list__item-text list__item-title">${listItemTitle}</p>
+                    <p class="list__item-text list__item-category">${listItemCategory}</p>
+                    <p class="list__item-text list__item-date">${listItemDate}</p>
+                    <p class="list__item-text list__item-desc hidden">${listItemDesc}</p>
+
+                    <div class="list__item-actions">
+                        <span class="list__item-icon list__item-icon--edit" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </span>
+                        <span class="list__item-icon list__item-icon--duplicate" title="Duplicate">
+                            <i class="fas fa-clone"></i>
+                        </span>
+                        <span class="list__item-icon list__item-icon--important" title="Mark as Important">
+                            <i class="far fa-star"></i>
+                        </span>
+                        <span class="list__item-icon list__item-icon--delete" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </span>
+                    </div>
+
+                    <div class="list__item-see-more">
+                        <span>See more</span>
+                    </div>
+        `
+
+    // See more functionality
+    const seeMore = newLiEl.querySelector('.list__item-see-more');
+    const newLiDesc = newLiEl.querySelector('.list__item-desc');
+
+    if (newLiDesc.textContent === '') {
+        seeMore.classList.add('invisible')
+    }
+
+    seeMore.addEventListener('click', function () {
+        newLiDesc.classList.toggle('hidden');
+        this.classList.toggle('active');
+    })
+
+
+    // Disable mark-important btn if not needed
+    const markImportantBtn = newLiEl.querySelector('.list__item-icon--important');
+    if (listName === 'important') {
+        markImportantBtn.classList.add('hidden')
+    }
+
+
+    // Disable Actions if passed date
+    const newLiActions = newLiEl.querySelectorAll('.list__item-actions > *');
+    const newLiDeleteBtn = newLiEl.querySelector('.list__item-icon--delete')
+    if (isPassedDate) {
+        newLiActions.forEach(action => {
+            action.classList.add('invisible');
+        })
+        newLiDeleteBtn.classList.remove('invisible');
+        newLiEl.classList.add('passed-date');
+    }
+
+
+    // Append Child to Current List
+    currentList.appendChild(newLiEl);
 }
 
 
@@ -259,7 +258,10 @@ function saveEditedTask(id) {
     currentObj.date = new Date(`${taskDateValue}`);
     currentObj.desc = taskDescValue;
 }
-// ========= List Item Actions ========= //
+
+
+
+// ========= Task Manipulation Actions ========= //
 
 
 function editTask(id) {
@@ -297,6 +299,15 @@ function editTask(id) {
 
     // Change Form Btn Text
     addTaskBtn.textContent = 'Edit Task'
+
+
+    // Scroll To Form
+    let scrollTarget = formEl.offsetTop;
+    window.scrollTo({
+        top: scrollTarget - 100,
+        behavior: 'smooth'
+    });
+    taskTitleEl.focus();
 }
 
 
@@ -316,8 +327,9 @@ function duplicateTask(id) {
 
     updateLists();
 
-    createListItems(order);
+    displayListItems(order);
 }
+
 
 function deleteTask(id) {
 
@@ -330,13 +342,9 @@ function deleteTask(id) {
 
     updateLists();
 
-    createListItems(order);
+    displayListItems(order);
 
-
-    // Check if main list is empty
-    if (mainListEl.children.length === 0) {
-        sortBtnWrapper.classList.add('invisible');
-    }
+    checkListsStatus();
 }
 
 
@@ -350,18 +358,123 @@ function markImportantTask(id) {
 
     updateLists();
 
-    createListItems(order);
+    displayListItems(order);
 
-
-    // Check if main list is empty
-    if (mainListEl.children.length === 0) {
-        sortBtnWrapper.classList.add('invisible');
-    }
+    checkListsStatus();
 }
 
 
 
-// ========= Utilities ========= //
+// ========= Secondary Functions ========= //
+
+function changeListOrder() {
+    sortBtn.textContent = sortBtn.textContent === 'Asc' ? 'Desc' : 'Asc';
+    order = order === 'asc' ? 'desc' : 'asc';
+    setDefaultOrderToLs();
+    displayListItems(order);
+}
+
+
+function updateLists() {
+    mainTasksArr = tasksArr.filter(task => {
+        return !task.isImportant;
+    })
+
+    importantTasksArr = tasksArr.filter(task => {
+        return task.isImportant;
+    })
+}
+
+
+function updateElementsContent() {
+    sortBtn.textContent = toProperCase(order);
+}
+
+
+function checkListsStatus() {
+
+    if (mainTasksArr.length === 0) {
+        sortBtnWrapper.classList.add('invisible');
+        clearMainBtnWrapper.classList.add('invisible');
+    } else {
+        sortBtnWrapper.classList.remove('invisible');
+        clearMainBtnWrapper.classList.remove('invisible');
+    }
+
+    if (importantTasksArr.length === 0) {
+        clearImportantBtnWrapper.classList.add('invisible');
+    } else {
+        clearImportantBtnWrapper.classList.remove('invisible');
+    }
+}
+
+
+function clearList(listName) {
+
+    // Main List
+    if (listName === 'main') {
+        for (let i = tasksArr.length - 1; i >= 0; --i) {
+            if (!tasksArr[i].isImportant) {
+                tasksArr.splice(i, 1)
+            }
+        }
+    }
+
+    // Important List
+    if (listName === 'important') {
+        for (let i = tasksArr.length - 1; i >= 0; --i) {
+            if (tasksArr[i].isImportant) {
+                tasksArr.splice(i, 1)
+            }
+        }
+    }
+
+    updateLists();
+
+    checkListsStatus();
+
+    displayListItems(order);
+}
+
+
+function setBackToDefault() {
+    form.reset();
+    editFlag = false;
+    addTaskBtn.textContent = 'Add Task';
+}
+
+
+// ========= Local Storage ========= //
+
+function getLocalStorage(item) {
+    return localStorage.getItem(item) ? JSON.parse(localStorage.getItem(item)) : null;
+}
+
+function updateLocalStorage() {
+    localStorage.setItem('tasks', JSON.stringify(tasksArr))
+}
+
+function setDefaultOrderToLs() {
+    localStorage.setItem('order', JSON.stringify(order));
+}
+
+function loadItemsFromLs() {
+    let tasks = getLocalStorage('tasks');
+
+    if (!tasks) tasks = [];
+
+    if (tasks.length > 0) {
+        tasks.forEach(task => {
+            let date = JSON.stringify(task.date);
+            task.date = new Date(JSON.parse(date));
+            tasksArr.push(task);
+        })
+    } else {
+        tasksArr = [];
+    }
+}
+
+// ========= Utility Functions ========= //
 
 function sortArrByDate(arr, order) {
     if (order === 'asc') {
@@ -386,31 +499,6 @@ function sortArrByDate(arr, order) {
 }
 
 
-function changeListOrder() {
-    sortBtn.textContent = sortBtn.textContent === 'Asc' ? 'Desc' : 'Asc';
-    order = order === 'asc' ? 'desc' : 'asc';
-    createListItems(order)
-}
-
-
-function updateLists() {
-    mainTasksArr = tasksArr.filter(task => {
-        return !task.isImportant;
-    })
-
-    importantTasksArr = tasksArr.filter(task => {
-        return task.isImportant;
-    })
-}
-
-
-function setBackToDefault() {
-    form.reset();
-    editFlag = false;
-    addTaskBtn.textContent = 'Add Task'
-}
-
-
 function formatDate(date = new Date()) {
     return [
         date.getFullYear(),
@@ -422,4 +510,9 @@ function formatDate(date = new Date()) {
 
 function padTo2Digits(num) {
     return num.toString().padStart(2, '0');
+}
+
+
+function toProperCase(str) {
+    return (str[0].toUpperCase() + str.substring(1).toLowerCase())
 }

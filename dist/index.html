@@ -37,7 +37,7 @@
             <form class="form" id="form">
 
                 <div class="form__group">
-                    <label for="task-title" class="form__label">Task Title</label>
+                    <label for="task-title" class="form__label">Title</label>
                     <input type="text" class="form__input form__input--title" id="task-title"
                         placeholder="e.g. Walk the dog">
                 </div>
@@ -73,10 +73,15 @@
 
 
             <!--& ---------- Important List ---------- -->
-            <div class="list-wrapper">
+            <div class="list-wrapper list-wrapper--important">
                 <h2 class="list__title list__title--important">My Important Tasks</h2>
+                <div class="list__nav">
+                    <div class="list__btn--clear-wrapper invisible" id="clear-important-btn-wrapper">
+                        <button class="list__btn--clear" id="clear-important-btn">Clear All Tasks</button>
+                    </div>
+                </div>
                 <ul class="list list--important">
-                    <li class="list__item">
+                    <!-- <li class="list__item">
                         <p class="list__item-text list__item-title">Walk the Dog</p>
                         <p class="list__item-text list__item-category">Leisure</p>
                         <p class="list__item-text list__item-date">20/2/2023</p>
@@ -97,44 +102,25 @@
                         <div class="list__item-see-more">
                             <span>See more</span>
                         </div>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
             <!--& ---------- End Of Important List ---------- -->
 
 
             <!--& ---------- Main List ---------- -->
-            <div class="list-wrapper">
+            <div class="list-wrapper list-wrapper--main">
                 <h2 class="list__title">My Main Tasks</h2>
-                <div class="list__btn--sort-wrapper invisible">
-                    <span class="list__btn--sort-text">Sort by</span><button class="list__btn--sort">Asc</button>
+                <div class="list__nav">
+                    <div class="list__btn--sort-wrapper invisible">
+                        <span class="list__btn--sort-text">Sort by</span><button class="list__btn--sort">Asc</button>
+                    </div>
+                    <div class="list__btn--clear-wrapper invisible" id="clear-main-btn-wrapper">
+                        <button class="list__btn--clear" id="clear-main-btn">Clear All Tasks</button>
+                    </div>
                 </div>
                 <ul class="list list--main">
-                    <li class="list__item">
-                        <p class="list__item-text list__item-title">Walk the Dog</p>
-                        <p class="list__item-text list__item-category">Leisure</p>
-                        <p class="list__item-text list__item-date">20/2/2023</p>
-                        <p class="list__item-text list__item-desc hidden">Road Trip to Italy</p>
 
-                        <div class="list__item-actions">
-                            <a href="#form" class="list__item-icon list__item-icon--edit" title="Edit">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <span class="list__item-icon list__item-icon--duplicate" title="Duplicate">
-                                <i class="fas fa-clone"></i>
-                            </span>
-                            <span class="list__item-icon list__item-icon--important" title="Mark as Important">
-                                <i class="far fa-star"></i>
-                            </span>
-                            <span class="list__item-icon list__item-icon--delete" title="Delete">
-                                <i class="fas fa-trash"></i>
-                            </span>
-                        </div>
-
-                        <div class="list__item-see-more">
-                            <span>See more</span>
-                        </div>
-                    </li>
                 </ul>
             </div>
             <!--& ---------- End Of Main List ---------- -->
