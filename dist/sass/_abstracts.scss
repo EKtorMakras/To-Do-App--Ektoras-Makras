@@ -35,12 +35,13 @@ $colors: ( //
     "red-base": #bb2525,
     "red-dark": #842029,
     "red-light": #e66b6b,
-    "red-light-2": #fce9ea,
+    "red-light-2": #fcefef,
 
     "green-base": #25bb32,
     "green-dark": #0f5132,
     "green-light": #6be675,
     "green-light-2": #d1e7dd,
+    "green-light-3": #cee1d8,
 
     //% ***************    *************** //
 
@@ -50,6 +51,7 @@ $colors: ( //
     /* General ones */
     "grey-generic-1": #777,
     "grey-generic-2": #999,
+    "grey-generic-2a": #505050,
     "grey-generic-3": #333,
 
     /* darkest grey - used for headings */
@@ -91,6 +93,27 @@ $colors: ( //
     "primary-dark-2": hsl(205, 72%, 37%),
     "primary-dark-3": hsl(205, 77%, 27%),
     "primary-dark-4": hsl(205, 86%, 17%),
+
+    //% ***************    *************** //
+
+
+    //% ***************  Secondary  *************** //
+
+    "secondary": hsl(157, 44%, 41%),
+
+    // Light Shades
+    "secondary-light-1": hsl(158, 85%, 95%),
+    "secondary-light-2": hsl(157, 90%, 88%),
+    "secondary-light-3": hsl(157, 86%, 81%),
+    "secondary-light-4": hsl(157, 90%, 76%),
+    "secondary-light-5": hsl(157, 89%, 70%),
+    "secondary-light-6": hsl(157, 63%, 48%),
+    "secondary-light-7": hsl(157, 65%, 40%),
+    // Dark Shades
+    "secondary-dark-1": hsl(157, 74%, 35%),
+    "secondary-dark-2": hsl(157, 72%, 30%),
+    "secondary-dark-3": hsl(157, 77%, 25%),
+    "secondary-dark-4": hsl(157, 86%, 17%),
 
     //% ***************    *************** //
 );
@@ -411,38 +434,3 @@ $break-points: ( //
 //% ***************    *************** //
 
 //* ************************************  End Of Mixins  ************************************ //
-
-
-
-
-
-
-
-// ----------------------------------- Comments ----------------------------------- //
-
-//* *************************************   Comment  ************************************* //
-//* *************************************  End Of Comment  ************************************* //
-
-
-//& ******************************  Comment  ****************************** //
-//& ******************************  End Of Comment  ****************************** //
-
-
-//$ *******************  Comment  ******************* $//
-//$ *******************  End Of Comment  ******************* $//
-
-
-//% ***************  Comment  *************** //
-//% ***************  End Of Comment  *************** //
-
-
-//@ ************  Comment  ************ //
-//@ ************  End Of Comment  ************ //
-
-
-//# ********  Comment  ******** //
-//# ********  End Of Comment  ******** //
-
-
-//^ *****  Comment  ***** //
-//^ *****  End Of Comment  ***** //

@@ -46,6 +46,7 @@ html {
 
 @import url("https://fonts.googleapis.com/css?family=Open+Sans|Roboto:400,700&display=swap");
 
+
 body {
     font-family: $ff-primary;
     font-size: fs(rg);
@@ -53,6 +54,7 @@ body {
     line-height: 1.5;
     overflow-x: hidden;
     height: 100vh;
+    position: relative;
 }
 
 
@@ -164,38 +166,61 @@ h4 {
     @include flex;
     background-color: rgba(color(grey-light-5), .8);
     min-height: 100vh;
+
+    @include media-max(em(1000)) {
+        padding: 0;
+    }
 }
 
 
-// center text
-.u-center-text {
-    text-align: center;
-}
+// Fade
+.fade {
 
+    &-in {
+        animation-name: fade-in;
+        animation-duration: .5s;
+        animation-fill-mode: forwards;
+        animation-timing-function: ease-out;
+    }
 
-// section set-up
-.section {
-    padding: 5rem 0;
+    &-out {
+        animation-name: fade-out;
+        animation-duration: .5s;
+        animation-fill-mode: forwards;
+        animation-timing-function: ease-out;
+    }
 
+    @keyframes fade-in {
 
-    &-center {
-        width: 90vw;
-        margin: 0 auto;
-        max-width: 1170px;
+        0% {
+            opacity: 0;
+            display: block;
+        }
 
-        @include media-min(992px) {
-            width: 95vw;
+        100% {
+            opacity: 1;
         }
     }
 
 
-    &-title {
-        margin-bottom: 4rem;
-        text-align: center;
+    @keyframes fade-out {
+
+        0% {
+            opacity: 1;
+            display: block;
+        }
+
+
+        100% {
+            opacity: 0;
+            display: none;
+        }
     }
 }
 
 
+
+// Display & Visibility
 
 .hidden {
     display: none !important;

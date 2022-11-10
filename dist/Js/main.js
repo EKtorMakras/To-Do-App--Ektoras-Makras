@@ -1,6 +1,8 @@
 //* ============================= Global Variables ============================= //
 
 // ========= Dom Elements ========= //
+
+// Form
 const formEl = document.querySelector('.form');
 const formInputEls = document.querySelectorAll('.form__input');
 const taskTitleEl = document.querySelector('#task-title');
@@ -8,18 +10,29 @@ const taskCategoryEl = document.querySelector('#task-category');
 const taskDateEl = document.querySelector('#task-date');
 const taskDescEl = document.querySelector('#task-description');
 const addTaskBtn = document.querySelector('.form__btn');
+const taskInputs = document.querySelectorAll('.form__input');
 
+// Lists
 const mainListEl = document.querySelector('.list--main');
 const importantListEl = document.querySelector('.list--important');
 const lists = document.querySelectorAll('.list');
 
+// Sort Button
 const sortBtnWrapper = document.querySelector('.list__btn--sort-wrapper');
 const sortBtn = document.querySelector('.list__btn--sort');
 
+// Clear Buttons
 const clearMainBtnWrapper = document.querySelector('#clear-main-btn-wrapper');
 const clearMainBtn = document.querySelector('#clear-main-btn');
 const clearImportantBtnWrapper = document.querySelector('#clear-important-btn-wrapper');
 const clearImportantBtn = document.querySelector('#clear-important-btn');
+
+// No Tasks Added Elements
+const noTasksImportant = document.querySelector('#no-tasks-important');
+const noTasksMain = document.querySelector('#no-tasks-main');
+
+// Alert Div
+const alert = document.querySelector('.alert');
 
 
 // ========= Other ========= //
@@ -27,9 +40,10 @@ const currentDate = new Date();
 let tasksArr = [];
 let mainTasksArr = [];
 let importantTasksArr = [];
-let order = getLocalStorage('order') ? getLocalStorage('order') : 'asc';
+let order = getItemFromLs('order') ? getItemFromLs('order') : 'asc';
 let editFlag = false;
 let editId;
+let displayTimeout;
 
 
 
@@ -45,25 +59,38 @@ window.addEventListener('DOMContentLoaded', () => {
     displayListItems(order);
 })
 
-// Add Task Action
+// Add/Edit Task Action
 addTaskBtn.addEventListener('click', (evt) => {
+
     evt.preventDefault();
 
-    if (!editFlag) {
-        addTaskObj();
-        updateLists();
-        checkListsStatus();
-        displayListItems(order);
+    const validation = validateInputs();
+
+
+    if (validation) {
+
+        if (!editFlag) {
+            addTaskObj();
+            updateLists();
+            checkListsStatus();
+            displayListItems(order);
+            displayAlert('Task Added Successfully', 'success');
+            setBackToDefault();
+        } else {
+            saveEditedTask(editId);
+            displayListItems(order);
+            displayAlert('Task Edited Successfully', 'success');
+            setBackToDefault();
+        }
     } else {
-        saveEditedTask(editId);
-        displayListItems(order);
+        displayAlert('Please fill out all fields', 'danger')
     }
 
-    setBackToDefault();
+
 })
 
 
-// Sort Action
+// Change Sort Order Action
 sortBtn.addEventListener('click', () => {
     changeListOrder();
 })
@@ -72,8 +99,11 @@ sortBtn.addEventListener('click', () => {
 // Task Manipulation Actions
 lists.forEach(list => {
     list.addEventListener('click', evt => {
+
         const target = evt.target;
-        if (target.closest('.list__item')) { //Check if an clicked in a li element
+
+        if (target.closest('.list__item')) { //Check if  clicked in a li element
+
             const parentLiEl = target.closest('.list__item');
             const liElId = parentLiEl.dataset.id;
 
@@ -82,23 +112,50 @@ lists.forEach(list => {
             } else if (target.classList.contains('fa-clone')) {
                 duplicateTask(liElId);
             } else if (target.classList.contains('fa-trash')) {
-                deleteTask(liElId);
+                if (confirm('Are you sure you want to delete this task?')) {
+                    deleteTask(liElId);
+                    displayAlert('Task Deleted Successfully', 'danger');
+                }
             } else if (target.classList.contains('fa-star')) {
                 markImportantTask(liElId);
+                displayAlert('Task Marked as Important', 'success')
             }
         }
     })
 })
 
 
-// Clear List Action
-clearMainBtn.addEventListener('click', () => {
-    clearList('main')
+// Clear Lists Actions
+clearImportantBtn.addEventListener('click', () => {
+    if (confirm('Are you sure you want to delete all important tasks?')) {
+        clearList('important');
+        displayAlert('Important Tasks List Cleared', 'danger');
+    }
 })
 
-clearImportantBtn.addEventListener('click', () => {
-    clearList('important')
+
+clearMainBtn.addEventListener('click', () => {
+    if (confirm('Are you sure you want to delete all main tasks?')) {
+        clearList('main');
+        displayAlert('Main Tasks List Cleared', 'danger');
+    }
 })
+
+
+// Validate Inputs on Input Change Action
+taskInputs.forEach(input => {
+    input.addEventListener('input', () => {
+        const validation = validateInputs();
+        if (validation) {
+            addTaskBtn.classList.remove('disabled');
+        } else {
+            addTaskBtn.classList.add('disabled');
+        }
+    })
+})
+
+
+
 
 //* ============================= Functions ============================= //
 
@@ -131,8 +188,10 @@ function addTaskObj() {
 
 
 function displayListItems(order) {
+
     sortArrByDate(mainTasksArr, order);
-    updateLocalStorage();
+    updateTasksArrInLs();
+
     mainListEl.innerHTML = '';
     importantListEl.innerHTML = '';
 
@@ -140,7 +199,6 @@ function displayListItems(order) {
     mainTasksArr.forEach(task => {
         createListItem('main', task);
     })
-
 
     // Important List
     importantTasksArr.forEach(task => {
@@ -261,8 +319,7 @@ function saveEditedTask(id) {
 
 
 
-// ========= Task Manipulation Actions ========= //
-
+// ========= Task Manipulation Functions ========= //
 
 function editTask(id) {
 
@@ -396,15 +453,19 @@ function checkListsStatus() {
     if (mainTasksArr.length === 0) {
         sortBtnWrapper.classList.add('invisible');
         clearMainBtnWrapper.classList.add('invisible');
+        noTasksMain.classList.add('shown');
     } else {
         sortBtnWrapper.classList.remove('invisible');
         clearMainBtnWrapper.classList.remove('invisible');
+        noTasksMain.classList.remove('shown');
     }
 
     if (importantTasksArr.length === 0) {
         clearImportantBtnWrapper.classList.add('invisible');
+        noTasksImportant.classList.add('shown');
     } else {
         clearImportantBtnWrapper.classList.remove('invisible');
+        noTasksImportant.classList.remove('shown');
     }
 }
 
@@ -437,29 +498,56 @@ function clearList(listName) {
 }
 
 
+function validateInputs() {
+    const inputsArr = [...taskInputs];
+
+    const check = inputsArr.every(input => {
+        return input.value !== "";
+    })
+
+    return check;
+}
+
+
+function displayAlert(msg, action) {
+
+    alert.textContent = msg;
+
+    alert.classList.remove('invisible');
+    alert.classList.remove('fade-out');
+    alert.classList.add('fade-in');
+    alert.classList
+    alert.classList.add(`alert-${action}`);
+
+    clearTimeout(displayTimeout);
+
+
+    displayTimeout = setTimeout(() => {
+        alert.classList.remove('fade-in');
+        alert.classList.add('fade-out');
+        alert.classList.remove(`alert-${action}`);
+    }, 2000);
+}
+
+
 function setBackToDefault() {
     form.reset();
     editFlag = false;
+    addTaskBtn.classList.add('disabled');
     addTaskBtn.textContent = 'Add Task';
 }
 
 
-// ========= Local Storage ========= //
 
-function getLocalStorage(item) {
+// ========= Local Storage Functions ========= //
+
+function getItemFromLs(item) {
     return localStorage.getItem(item) ? JSON.parse(localStorage.getItem(item)) : null;
 }
 
-function updateLocalStorage() {
-    localStorage.setItem('tasks', JSON.stringify(tasksArr))
-}
-
-function setDefaultOrderToLs() {
-    localStorage.setItem('order', JSON.stringify(order));
-}
 
 function loadItemsFromLs() {
-    let tasks = getLocalStorage('tasks');
+    let tasks = getItemFromLs('tasks');
 
     if (!tasks) tasks = [];
 
@@ -473,6 +561,19 @@ function loadItemsFromLs() {
         tasksArr = [];
     }
 }
+
+
+function setDefaultOrderToLs() {
+    localStorage.setItem('order', JSON.stringify(order));
+}
+
+
+function updateTasksArrInLs() {
+    localStorage.setItem('tasks', JSON.stringify(tasksArr));
+}
+
+
+
 
 // ========= Utility Functions ========= //
 

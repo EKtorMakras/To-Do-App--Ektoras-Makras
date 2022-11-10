@@ -28,45 +28,63 @@
 
 <body>
 
-
     <div class="container">
 
         <div class="inner-container">
 
+            <!--& ---------- Main Heading ---------- -->
+            <h1 class="main-heading">Evernote <span>2.0</span></h1>
+            <!--& ---------- End of Main Heading ---------- -->
+
+
             <!--& ---------- Form ---------- -->
             <form class="form" id="form">
 
+                <!-- Title -->
                 <div class="form__group">
                     <label for="task-title" class="form__label">Title</label>
-                    <input type="text" class="form__input form__input--title" id="task-title"
-                        placeholder="e.g. Walk the dog">
+                    <span class="form__input-wrapper">
+                        <input type="text" class="form__input form__input--title" id="task-title"
+                            placeholder="e.g. Walk the dog" maxlength="15" required>
+                    </span>
                 </div>
 
+                <!-- Category -->
                 <div class="form__group">
                     <label for="task-category" class="form__label">Category</label>
-                    <select class="form__input form__input--select" id="task-category" name="task-category">
-                        <option value="" disabled selected hidden>Choose a Category...</option>
-                        <option value="Personal" class="form__option">Personal</option>
-                        <option value="Work" class="form__option">Work</option>
-                        <option value="Leisure" class="form__option">Leisure</option>
-                        <option value="Misc" class="form__option">Misc</option>
-                    </select>
+                    <span class="form__input-wrapper">
+                        <select class="form__input form__input--select" id="task-category" name="task-category">
+                            <option value="" disabled selected hidden>Choose a Category...</option>
+                            <option value="Personal" class="form__option">Personal</option>
+                            <option value="Work" class="form__option">Work</option>
+                            <option value="Leisure" class="form__option">Leisure</option>
+                            <option value="Misc" class="form__option">Misc</option>
+                        </select>
+                    </span>
                 </div>
 
+                <!-- Date -->
                 <div class="form__group">
                     <label for="task-date" class="form__label">Date to be completed</label>
-                    <input type="date" class="form__input form__input--date" id="task-date">
+                    <span class="form__input-wrapper">
+                        <input type="date" class="form__input form__input--date" id="task-date">
+                    </span>
                 </div>
 
+                <!-- Description -->
                 <div class="form__group">
                     <label for="task-description class=" class="form__label">Task Description</label>
-                    <textarea type="text" class="form__input form__input--description" id="task-description" rows="8"
-                        cols="6" maxlength="300"></textarea>
+                    <span class="form__input-wrapper form__input-wrapper--desc">
+                        <textarea type="text" class="form__input form__input--description" id="task-description"
+                            rows="8" cols="6" maxlength="300" placeholder="Add your description..."></textarea>
+                    </span>
                 </div>
 
+                <!-- Submit Button -->
                 <div class="form__btn-wrapper">
-                    <button type="submit" class="form__btn">Add Task</button>
+                    <button type="submit" class="form__btn disabled">Add Task</button>
                 </div>
+
             </form>
 
             <!--& ---------- End Of Form ---------- -->
@@ -74,43 +92,29 @@
 
             <!--& ---------- Important List ---------- -->
             <div class="list-wrapper list-wrapper--important">
+
                 <h2 class="list__title list__title--important">My Important Tasks</h2>
+
                 <div class="list__nav">
                     <div class="list__btn--clear-wrapper invisible" id="clear-important-btn-wrapper">
                         <button class="list__btn--clear" id="clear-important-btn">Clear All Tasks</button>
                     </div>
                 </div>
+
                 <ul class="list list--important">
-                    <!-- <li class="list__item">
-                        <p class="list__item-text list__item-title">Walk the Dog</p>
-                        <p class="list__item-text list__item-category">Leisure</p>
-                        <p class="list__item-text list__item-date">20/2/2023</p>
-                        <p class="list__item-text list__item-desc hidden">Road Trip to Italy</p>
-
-                        <div class="list__item-actions">
-                            <a href="#form" class="list__item-icon list__item-icon--edit" title="Edit">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <span class="list__item-icon list__item-icon--duplicate" title="Duplicate">
-                                <i class="fas fa-clone"></i>
-                            </span>
-                            <span class="list__item-icon list__item-icon--delete" title="Delete">
-                                <i class="fas fa-trash"></i>
-                            </span>
-                        </div>
-
-                        <div class="list__item-see-more">
-                            <span>See more</span>
-                        </div>
-                    </li> -->
                 </ul>
+
+                <p class="list__noTasks shown" id="no-tasks-important">No tasks added...</p>
+
             </div>
             <!--& ---------- End Of Important List ---------- -->
 
 
             <!--& ---------- Main List ---------- -->
             <div class="list-wrapper list-wrapper--main">
+
                 <h2 class="list__title">My Main Tasks</h2>
+
                 <div class="list__nav">
                     <div class="list__btn--sort-wrapper invisible">
                         <span class="list__btn--sort-text">Sort by</span><button class="list__btn--sort">Asc</button>
@@ -119,38 +123,21 @@
                         <button class="list__btn--clear" id="clear-main-btn">Clear All Tasks</button>
                     </div>
                 </div>
-                <ul class="list list--main">
 
+                <ul class="list list--main">
                 </ul>
+
+                <p class="list__noTasks shown" id="no-tasks-main">No tasks added...</p>
+
             </div>
             <!--& ---------- End Of Main List ---------- -->
         </div>
+
     </div>
 
-
+    <!--# ---- Alert ---- -->
+    <p class="alert invisible">Alert</p>
 
 </body>
 
 </html>
-
-
-
-<!-- ----------------------------------- Comments ----------------------------------- -->
-
-<!--* ------------------------------ Header ------------------------------ *-->
-<!--* ------------------------------ End Of Header ------------------------------ *-->
-
-<!--$ --------------- Showcase/Hero Section --------------- $-->
-<!--$ --------------- End Of Showcase/Hero Section --------------- $-->
-
-<!--& ---------- Hero ---------- -->
-<!--& ---------- End Of Hero ---------- -->
-
-<!--% ------- Hero ------- -->
-<!--% ------- End Of Hero ------- -->
-
-<!--# ---- Hero ---- -->
-<!--# ---- End Of Hero ---- -->
-
-<!--^ -- Hero -- -->
-<!--^ -- End Of Hero -- -->
