@@ -60,7 +60,7 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 // Add/Edit Task Action
-addTaskBtn.addEventListener('click', (evt) => {
+addTaskBtn.addEventListener('click', evt => {
 
     evt.preventDefault();
 
@@ -513,10 +513,8 @@ function displayAlert(msg, action) {
 
     alert.textContent = msg;
 
-    alert.classList.remove('invisible');
-    alert.classList.remove('fade-out');
+    alert.className = 'alert'
     alert.classList.add('fade-in');
-    alert.classList
     alert.classList.add(`alert-${action}`);
 
     clearTimeout(displayTimeout);
@@ -525,7 +523,6 @@ function displayAlert(msg, action) {
     displayTimeout = setTimeout(() => {
         alert.classList.remove('fade-in');
         alert.classList.add('fade-out');
-        alert.classList.remove(`alert-${action}`);
     }, 2000);
 }
 

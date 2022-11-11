@@ -159,19 +159,6 @@ h4 {
 }
 
 
-// container
-.container {
-    max-width: $max-width;
-    padding: 5rem 3rem;
-    @include flex;
-    background-color: rgba(color(grey-light-5), .8);
-    min-height: 100vh;
-
-    @include media-max(em(1000)) {
-        padding: 0;
-    }
-}
-
 
 // Fade
 .fade {
